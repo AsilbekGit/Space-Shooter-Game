@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     public float  minValueInstantiate;
     public float  maxValueInstantiate;
     public float  enemyDestroyTime = 10f;
+    public GameObject shieldPowerUpPrefab;
+    public GameObject multiShotPowerUpPrefab;
+    public float powerUpSpawnInterval = 10f;
 
     [Header("Particle Effects")]
     public GameObject explosion;
@@ -33,6 +36,7 @@ public class GameManager : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 0f;
         InvokeRepeating("InstantiateEnemy", 1f, 1f);
+        InvokeRepeating("SpawnPowerUps", powerUpSpawnInterval, powerUpSpawnInterval);
     }
     private void Update()
     {
@@ -48,6 +52,22 @@ public class GameManager : MonoBehaviour
         GameObject enemy =  Instantiate(enemyPrefab,enemypos,Quaternion.Euler(0f,0f,180f));
         Destroy(enemy,enemyDestroyTime);
     }
+
+    void SpawnPowerUps()
+    {
+        Vector3 powerUpPosition = new Vector3(UnityEngine.Random.Range(-8f, 8f), 5f, 0f);
+        int randomPowerUp = UnityEngine.Random.Range(0, 2);
+
+        if (randomPowerUp == 0)
+        {
+            Instantiate(shieldPowerUpPrefab, powerUpPosition, Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(multiShotPowerUpPrefab, powerUpPosition, Quaternion.identity);
+        }
+    }
+    
     public void StartButton()
     {
         startMenu.SetActive(false);
