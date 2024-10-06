@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 10f; 
@@ -12,6 +11,15 @@ public class PlayerController : MonoBehaviour
     public Transform missileSpawnPositon;
     public float destroyTime = 5f ;
     public Transform muzzleSpawnPosition;
+
+
+    public int lives = 3;
+    public Text livesText;
+
+    private void Start()
+    {
+        UpdateLivesUI(); // Update UI at the start
+    }
     private void Update()
     {
 
@@ -52,14 +60,38 @@ public class PlayerController : MonoBehaviour
             muzzle.transform.SetParent(null);
             Destroy(muzzle, destroyTime);
     }
-     private void OnCollisionEnter2D( Collision2D collision)
+     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-            GameObject gm = Instantiate(GameManager.instance.explosion, transform.position, transform.rotation);
-            Destroy(gm, 2f);
-            Destroy(this.gameObject);
-            // Game over screen     
+            // Instantiate explosion effect
+            GameObject explosion = Instantiate(GameManager.instance.explosion, transform.position, Quaternion.identity);
+            Destroy(explosion, 2f); // Destroy explosion after 2 seconds
+
+            lives--; // Decrease lives
+            UpdateLivesUI(); // Update UI when lives decrease
+
+            if (lives <= 0)
+            {
+                // Player is out of lives
+                GameObject gm = Instantiate(GameManager.instance.explosion, transform.position, transform.rotation);
+                Destroy(gm, 2f);
+                Destroy(gameObject);
+                GameManager.instance.GameOver(); // Trigger game over logic
+            }
+            else
+            {
+                // Optionally, handle what happens on losing a life
+                Debug.Log("Lives left: " + lives);
+            }
+
+            // Destroy the enemy
+            Destroy(collision.gameObject);
         }
+    }
+
+    void UpdateLivesUI()
+    {
+        livesText.text = "Lives: " + lives;
     }
 }

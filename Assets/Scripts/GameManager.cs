@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public GameObject explosion;
     public GameObject muzzleFlash;
 
+    public GameObject gameOverPanel;
+
 
     [Header("Panels")]
     public GameObject startMenu;
@@ -69,6 +71,14 @@ public class GameManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void GameOver()
+    {
+        // Implement game over logic here
+        gameOverPanel.SetActive(true); // Show game over panel
+        Time.timeScale = 0f; // Stop the game
+        Debug.Log("Game Over!");
     }
    
 }
