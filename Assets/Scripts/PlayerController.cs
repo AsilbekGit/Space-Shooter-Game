@@ -17,9 +17,26 @@ public class PlayerController : MonoBehaviour
     public bool isMultiShotActive = false;
     public float multiShotDuration = 5f;
 
+    
 
     public int lives = 3;
     public Text livesText;
+
+
+   AudioManager audioManager;
+
+private void Awake()
+{
+    GameObject audioManagerObject = GameObject.FindGameObjectWithTag("Audio");
+    if (audioManagerObject != null)
+    {
+        audioManager = audioManagerObject.GetComponent<AudioManager>();
+    }
+    else
+    {
+        Debug.LogError("No GameObject found with the 'Audio' tag");
+    }
+}
 
     private void Start()
     {
@@ -44,6 +61,7 @@ public class PlayerController : MonoBehaviour
     void PlayerShoot(){
         if(Input.GetKeyDown(KeyCode.Space))
         {
+            audioManager.PlaySFX(audioManager.shoot);
             if (isMultiShotActive)
             {
                 // Fire three missiles in a spread pattern
@@ -117,6 +135,7 @@ public class PlayerController : MonoBehaviour
                     GameObject gm = Instantiate(GameManager.instance.explosion, transform.position, transform.rotation);
                     Destroy(gm, 2f);
                     Destroy(gameObject);  // Destroy the player
+                    audioManager.PlayGameOverSound();
                     GameManager.instance.GameOver();  // Trigger Game Over
                 }
                 else
