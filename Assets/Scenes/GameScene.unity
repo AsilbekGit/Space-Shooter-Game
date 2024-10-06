@@ -1685,6 +1685,11 @@ MonoBehaviour:
   missileSpawnPositon: {fileID: 61406894}
   destroyTime: 5
   muzzleSpawnPosition: {fileID: 625711185}
+  isShieldActive: 0
+  shieldDuration: 5
+  shieldSprite: {fileID: 1387191863}
+  isMultiShotActive: 0
+  multiShotDuration: 5
   lives: 3
   livesText: {fileID: 233658362}
 --- !u!50 &1068042911

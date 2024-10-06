@@ -98,39 +98,38 @@ public class PlayerController : MonoBehaviour
             muzzle.transform.SetParent(null);
             Destroy(muzzle, destroyTime);
     }
-     private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
             if (!isShieldActive)
             {
                 // Instantiate explosion effect
-            GameObject explosion = Instantiate(GameManager.instance.explosion, transform.position, Quaternion.identity);
-            Destroy(explosion, 2f); // Destroy explosion after 2 seconds
+                GameObject explosion = Instantiate(GameManager.instance.explosion, transform.position, Quaternion.identity);
+                Destroy(explosion, 2f); // Destroy explosion after 2 seconds
 
-            lives--; // Decrease lives
-            UpdateLivesUI(); // Update UI when lives decrease
+                lives--; // Decrease lives
+                UpdateLivesUI(); // Update UI when lives decrease
 
-            if (lives <= 0)
-            {
-                // Player is out of lives
-                GameObject gm = Instantiate(GameManager.instance.explosion, transform.position, transform.rotation);
+                if (lives <= 0)
+                {
+                    // Player is out of lives
+                    GameObject gm = Instantiate(GameManager.instance.explosion, transform.position, transform.rotation);
                     Destroy(gm, 2f);
-                    Destroy(gameObject);
-            }
-            else{
-                Destroy(collision.gameObject);
-            }
-                GameManager.instance.GameOver(); // Trigger game over logic
+                    Destroy(gameObject);  // Destroy the player
+                    GameManager.instance.GameOver();  // Trigger Game Over
+                }
+                else
+                {
+                    // Only destroy the enemy when the player still has lives
+                    Destroy(collision.gameObject);
+                }
             }
             else
             {
-                // Optionally, handle what happens on losing a life
-                Debug.Log("Lives left: " + lives);
+                // Player is shielded, destroy the enemy but not the player
+                Destroy(collision.gameObject);
             }
-
-            // Destroy the enemy
-            Destroy(collision.gameObject);
         }
     }
 
