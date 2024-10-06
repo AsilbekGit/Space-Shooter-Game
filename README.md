@@ -22,7 +22,7 @@ Canva Presentation -  https://www.canva.com/design/DAGSz6npT8A/mdmwOFwhlerV4LDOS
 - **Enemies**: Waves of enemies move towards the player that must be shot down.
 - **Power-Ups**: Collect power-ups like shields and multi-shot to increase your survival chances.
 - **Game Over Screen**: Displays game over information when the player runs out of lives.
-- **Score System**: Gain points for each enemy destroyed.
+
 
 ## Setup
 
@@ -44,7 +44,6 @@ Canva Presentation -  https://www.canva.com/design/DAGSz6npT8A/mdmwOFwhlerV4LDOS
 - **Shooting**: Press the **Space** key to shoot missiles.
 - **Objective**: Destroy incoming enemies, collect power-ups, and survive as long as possible.
 - **Lives**: The player starts with 3 lives. If an enemy hits the player, a life is lost.
-- **Score**: Gain points for each enemy destroyed. The score increases with each obstacle eliminated.
 
 ## Power-Ups
 
@@ -65,7 +64,7 @@ Handles player movement, shooting, and interaction with power-ups. Key features 
 - **Movement Controls**: Control the player's position on the screen.
 - **Shooting Logic**: Manage single and multi-shot modes.
 - **Collision Handling**: Handle interactions between the player and enemies or power-ups.
-- **Score Tracking**: Update the score each time an enemy is destroyed.
+
 
 ### GameManager.cs
 
@@ -74,7 +73,7 @@ Manages the overall game state, including spawning enemies and power-ups.
 - **Spawn Enemies**: Uses `InvokeRepeating` to generate enemies at intervals.
 - **Spawn Power-Ups**: Spawns random power-ups during gameplay at set intervals.
 - **Game Over Logic**: Handles the game-over state and displays the game-over UI.
-- **Score Management**: Keeps track of the player's score during gameplay.
+
 
 ### PowerUpController.cs
 
@@ -95,7 +94,7 @@ Handles missile behavior, including movement and collision detection.
 Controls enemy behavior, including their movement patterns.
 
 - **Movement**: Moves enemies downward towards the player, making them obstacles to avoid or destroy.
-- **Score Increment**: Increments the player's score when destroyed.
+
 
 ## Future Improvements
 
@@ -113,6 +112,10 @@ Controls enemy behavior, including their movement patterns.
 
 ---
 
+
+
+
+https://github.com/user-attachments/assets/2326ff6c-0956-4474-bcfa-099f7b343d27
 
 
 
