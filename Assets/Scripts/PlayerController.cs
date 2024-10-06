@@ -11,6 +11,11 @@ public class PlayerController : MonoBehaviour
     public Transform missileSpawnPositon;
     public float destroyTime = 5f ;
     public Transform muzzleSpawnPosition;
+    public bool isShieldActive = false;
+    public float shieldDuration = 5f;
+    public GameObject shieldSprite;
+    public bool isMultiShotActive = false;
+    public float multiShotDuration = 5f;
 
     
 
@@ -49,26 +54,60 @@ private void Awake()
         float xpos = Input.GetAxis("Horizontal");
         float ypos = Input.GetAxis("Vertical");
         
-        UnityEngine.Vector3 movement = new UnityEngine.Vector3(xpos, ypos,0)* speed * Time.deltaTime;
-        transform.Translate(movement);
+        UnityEngine.Vector3 movement = new UnityEngine.Vector3(xpos, ypos, 0) * speed * Time.deltaTime;
+    transform.Translate(movement);
     }
 
     void PlayerShoot(){
         if(Input.GetKeyDown(KeyCode.Space))
         {
             audioManager.PlaySFX(audioManager.shoot);
-            SpawnMissile();
+            if (isMultiShotActive)
+            {
+                // Fire three missiles in a spread pattern
+                SpawnMissile(missileSpawnPositon.position + new UnityEngine.Vector3(-0.5f, 0, 0));
+                SpawnMissile(missileSpawnPositon.position);  // Middle missile
+                SpawnMissile(missileSpawnPositon.position + new UnityEngine.Vector3(0.5f, 0, 0));
+            }
+            else
+            {
+                // Fire only one missile
+                SpawnMissile(missileSpawnPositon.position);
+            }
             SpawnMuzzleFlash();
-           
         }
-
     }
-    void SpawnMissile()
+
+    public void ActivateShield()
     {
-            GameObject gm = Instantiate(missile,missileSpawnPositon);
-            GameObject muzzle = Instantiate(GameManager.instance.muzzleFlash, muzzleSpawnPosition);
-            gm.transform.SetParent(null);
-            Destroy(gm, destroyTime);
+        isShieldActive = true;
+        shieldSprite.SetActive(true);  // Show the shield sprite
+        StartCoroutine(DeactivateShieldAfterTime());
+    }
+
+    private IEnumerator DeactivateShieldAfterTime()
+    {
+        yield return new WaitForSeconds(shieldDuration);
+        isShieldActive = false;
+        shieldSprite.SetActive(false);  // Hide the shield sprite
+    }
+    void SpawnMissile(UnityEngine.Vector3 position)
+    {
+        GameObject gm = Instantiate(missile, position, UnityEngine.Quaternion.identity);
+        gm.transform.SetParent(null);
+        Destroy(gm, destroyTime);
+    }
+
+    public void ActivateMultiShot()
+    {
+        isMultiShotActive = true;
+        StartCoroutine(DeactivateMultiShotAfterTime());
+    }
+
+    private IEnumerator DeactivateMultiShotAfterTime()
+    {
+        yield return new WaitForSeconds(multiShotDuration);
+        isMultiShotActive = false;
     }
     void SpawnMuzzleFlash()
     {
@@ -77,34 +116,39 @@ private void Awake()
             muzzle.transform.SetParent(null);
             Destroy(muzzle, destroyTime);
     }
-     private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            // Instantiate explosion effect
-            GameObject explosion = Instantiate(GameManager.instance.explosion, transform.position, Quaternion.identity);
-            Destroy(explosion, 2f); // Destroy explosion after 2 seconds
-
-            lives--; // Decrease lives
-            UpdateLivesUI(); // Update UI when lives decrease
-
-            if (lives <= 0)
+            if (!isShieldActive)
             {
-                // Player is out of lives
-                GameObject gm = Instantiate(GameManager.instance.explosion, transform.position, transform.rotation);
-                Destroy(gm, 2f);
-                Destroy(gameObject);
-                audioManager.PlayGameOverSound();
-                GameManager.instance.GameOver(); // Trigger game over logic
+                // Instantiate explosion effect
+                GameObject explosion = Instantiate(GameManager.instance.explosion, transform.position, Quaternion.identity);
+                Destroy(explosion, 2f); // Destroy explosion after 2 seconds
+
+                lives--; // Decrease lives
+                UpdateLivesUI(); // Update UI when lives decrease
+
+                if (lives <= 0)
+                {
+                    // Player is out of lives
+                    GameObject gm = Instantiate(GameManager.instance.explosion, transform.position, transform.rotation);
+                    Destroy(gm, 2f);
+                    Destroy(gameObject);  // Destroy the player
+                    audioManager.PlayGameOverSound();
+                    GameManager.instance.GameOver();  // Trigger Game Over
+                }
+                else
+                {
+                    // Only destroy the enemy when the player still has lives
+                    Destroy(collision.gameObject);
+                }
             }
             else
             {
-                // Optionally, handle what happens on losing a life
-                Debug.Log("Lives left: " + lives);
+                // Player is shielded, destroy the enemy but not the player
+                Destroy(collision.gameObject);
             }
-
-            // Destroy the enemy
-            Destroy(collision.gameObject);
         }
     }
 
