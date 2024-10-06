@@ -29,6 +29,9 @@ public class PowerUpController : MonoBehaviour
             // Destroy the power-up after it is collected
             Destroy(gameObject);
         }
+
+        Debug.Log("Player collected power-up: " + powerUpType);
+
     }
 
     void Update(){

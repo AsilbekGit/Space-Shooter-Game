@@ -57,16 +57,16 @@ public class GameManager : MonoBehaviour
 
     void SpawnPowerUps()
     {
-        Vector3 powerUpPosition = new Vector3(UnityEngine.Random.Range(-8f, 8f), 5f, 0f);
-        int randomPowerUp = UnityEngine.Random.Range(0, 2);
+        Vector3 powerUpPosition = new Vector3(UnityEngine.Random.Range(minValueInstantiate, maxValueInstantiate), 5f);
+        int randomPowerUp = UnityEngine.Random.Range(0, 1);
 
         if (randomPowerUp == 0)
         {
-            Instantiate(shieldPowerUpPrefab, powerUpPosition, Quaternion.identity);
+            Instantiate(shieldPowerUpPrefab, powerUpPosition, Quaternion.Euler(0f,0f,180f));
         }
         else
         {
-            Instantiate(multiShotPowerUpPrefab, powerUpPosition, Quaternion.identity);
+            Instantiate(multiShotPowerUpPrefab, powerUpPosition, Quaternion.Euler(0f,0f,180f));
         }
     }
     
