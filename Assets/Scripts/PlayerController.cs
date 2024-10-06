@@ -12,9 +12,26 @@ public class PlayerController : MonoBehaviour
     public float destroyTime = 5f ;
     public Transform muzzleSpawnPosition;
 
+    
 
     public int lives = 3;
     public Text livesText;
+
+
+   AudioManager audioManager;
+
+private void Awake()
+{
+    GameObject audioManagerObject = GameObject.FindGameObjectWithTag("Audio");
+    if (audioManagerObject != null)
+    {
+        audioManager = audioManagerObject.GetComponent<AudioManager>();
+    }
+    else
+    {
+        Debug.LogError("No GameObject found with the 'Audio' tag");
+    }
+}
 
     private void Start()
     {
@@ -39,7 +56,7 @@ public class PlayerController : MonoBehaviour
     void PlayerShoot(){
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            
+            audioManager.PlaySFX(audioManager.shoot);
             SpawnMissile();
             SpawnMuzzleFlash();
            
@@ -77,6 +94,7 @@ public class PlayerController : MonoBehaviour
                 GameObject gm = Instantiate(GameManager.instance.explosion, transform.position, transform.rotation);
                 Destroy(gm, 2f);
                 Destroy(gameObject);
+                audioManager.PlayGameOverSound();
                 GameManager.instance.GameOver(); // Trigger game over logic
             }
             else
