@@ -2,9 +2,6 @@
 
 A 2D space shooter game built using Unity, where players control a spaceship to destroy enemies, collect power-ups, and survive as long as possible. The game includes multiple power-up features such as shields and multi-shot abilities, giving the player temporary enhancements to face waves of enemies.
 
-## Documentation on Google Docs and Presentation on Canva
-Google Docs - https://docs.google.com/document/d/13A81vZo_E5Fa48ZfIxXzjhUEmNsp5r8_3Pm6865HX-E/edit
-Canva Presentation -  https://www.canva.com/design/DAGSz6npT8A/mdmwOFwhlerV4LDOSul-Bw/edit?utm_content=DAGSz6npT8A&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 ## Table of Contents
 
 - [Features](#features)
